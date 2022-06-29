@@ -4,6 +4,11 @@ while (true)
 {
     try
     {
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.WriteLine("Welcome to Matrix :)");
+        Console.WriteLine();
+        Console.ResetColor();
+
         Console.WriteLine("Please enter the number of rows:");
         int numberOfRows = Convert.ToInt32(Console.ReadLine());
         if (numberOfRows <= 1)
@@ -40,7 +45,7 @@ while (true)
 
 
     Console.WriteLine();
-    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
     Console.WriteLine("Press 'Enter' to try again, or any another keys to exit...");
     Console.ResetColor();
 

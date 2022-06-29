@@ -22,7 +22,17 @@ namespace Matrix
         }
 
 
-
+        private void Generate()
+        {
+            _matrix = new int[_numberOfRows, _numberOfColumns];
+            for (int rowIndex = 0; rowIndex < _numberOfRows; rowIndex++)
+            {
+                for (int columnIndex = 0; columnIndex < _numberOfColumns; columnIndex++)
+                {
+                    _matrix[rowIndex, columnIndex] = new Random().Next(0, 2);
+                }
+            }
+        }
 
 
         public void FindSquare(int sideLength)
@@ -40,44 +50,6 @@ namespace Matrix
         }
 
 
-        private List<Coordinates> FindNearestSquare(int sideLength)
-        {
-            var nearestSquare = new List<Coordinates>();
-            double nearestDistance = _numberOfRows * _numberOfColumns;
-            int skip = 0;
-
-            while (true)
-            {
-                var square = _coordinates.Skip(skip).Take(sideLength * sideLength);
-                if (square.Count() != Math.Pow(sideLength, 2))
-                    break;
-
-                var newDistance = Math.Sqrt(Math.Pow(square.First().RowIndex, 2) + Math.Pow(square.First().ColumnIndex, 2));
-                if (newDistance < nearestDistance)
-                {
-                    nearestDistance = newDistance;
-                    nearestSquare = square.ToList();
-                }
-
-                skip += sideLength * sideLength;
-            }
-
-            return nearestSquare;
-        }
-
-        private void Generate()
-        {
-            _matrix = new int[_numberOfRows, _numberOfColumns];
-            for (int i = 0; i < _numberOfRows; i++)
-            {
-                for (int j = 0; j < _numberOfColumns; j++)
-                {
-                    _matrix[i, j] = new Random().Next(0, 2);
-                }
-            }
-        }
-
-
         private bool CheckIsThereSquare(int sideLength)
         {
             bool isThereSquare = false;
@@ -88,7 +60,7 @@ namespace Matrix
                 {
                     if (_matrix[rowIndex, columnIndex] == 1)
                     {
-                        int cellCount = 0;
+                        int cellCount = 0; //Cells that are equal to 1
 
                         for (int rowChecker = rowIndex; rowChecker < rowIndex + sideLength; rowChecker++)
                         {
@@ -129,31 +101,57 @@ namespace Matrix
         }
 
 
+        private List<Coordinates> FindNearestSquare(int sideLength)
+        {
+            var nearestSquare = new List<Coordinates>();
+            double nearestDistance = sideLength * Math.Sqrt(2);
+            int skip = 0;
+
+            while (true)
+            {
+                var square = _coordinates.Skip(skip).Take(sideLength * sideLength);
+                if (square.Count() != Math.Pow(sideLength, 2))
+                    break;
+
+                var newDistance = Math.Sqrt(Math.Pow(square.First().RowIndex, 2) + Math.Pow(square.First().ColumnIndex, 2));
+                if (newDistance < nearestDistance)
+                {
+                    nearestDistance = newDistance;
+                    nearestSquare = square.ToList();
+                }
+
+                skip += sideLength * sideLength;
+            }
+
+            return nearestSquare;
+        }
+
+
         private void PrintMatrix(List<Coordinates> nearestSquare)
         {
-            for (int i = 0; i < _numberOfRows; i++)
+            for (int rowIndex = 0; rowIndex < _numberOfRows; rowIndex++)
             {
-                for (int j = 0; j < _numberOfColumns; j++)
+                for (int columnIndex = 0; columnIndex < _numberOfColumns; columnIndex++)
                 {
-                    if (_coordinates.Any(c => c.RowIndex == i && c.ColumnIndex == j))
+                    if (_coordinates.Any(c => c.RowIndex == rowIndex && c.ColumnIndex == columnIndex))
                     {
 
-                        if (nearestSquare.Any(c => c.RowIndex == i && c.ColumnIndex == j))
+                        if (nearestSquare.Any(c => c.RowIndex == rowIndex && c.ColumnIndex == columnIndex))
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(_matrix[i, j] + " ");
+                            Console.Write(_matrix[rowIndex, columnIndex] + " ");
                             Console.ResetColor();
                         }
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.Magenta;
-                            Console.Write(_matrix[i, j] + " ");
+                            Console.Write(_matrix[rowIndex, columnIndex] + " ");
                             Console.ResetColor();
                         }
                     }
                     else
                     {
-                        Console.Write(_matrix[i, j] + " ");
+                        Console.Write(_matrix[rowIndex, columnIndex] + " ");
                     }
                 }
                 Console.WriteLine();
