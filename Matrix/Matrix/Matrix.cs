@@ -104,7 +104,7 @@ namespace Matrix
         private List<Coordinates> FindNearestSquare(int sideLength)
         {
             var nearestSquare = new List<Coordinates>();
-            double nearestDistance = sideLength * Math.Sqrt(2);
+            double nearestDistance = _numberOfRows * _numberOfColumns;
             int skip = 0;
 
             while (true)
